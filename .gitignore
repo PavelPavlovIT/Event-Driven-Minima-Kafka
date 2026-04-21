@@ -8,3 +8,8 @@
 /Gateway/obj
 /OrderService/obj
 /ReadModelSync/obj
+/Common/bin/Debug/net9.0
+/Gateway/bin/Debug/net9.0
+/Gateway/bin/Debug/net9.0/runtimes/linux-arm64/native/alpine-librdkafka.so
+/OrderService/bin/Debug/net9.0
+/ReadModelSync/bin/Debug/net9.0
