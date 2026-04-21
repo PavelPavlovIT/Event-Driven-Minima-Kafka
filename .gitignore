@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Common/obj
+/Event-Driven-Minima/.vs/Event-Driven-Minima
+/Event-Driven-Minima/obj
+/Gateway/obj
+/OrderService/obj
+/ReadModelSync/obj
