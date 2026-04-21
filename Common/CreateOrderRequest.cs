@@ -8,5 +8,7 @@ namespace Common
 {
     public class CreateOrderRequest
     {
+        public string CustomerName { get; set; }
+        public decimal Amount { get; set; }
     }
 }

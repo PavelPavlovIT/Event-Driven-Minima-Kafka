@@ -1,27 +1,38 @@
 using Confluent.Kafka;
+using Microsoft.AspNetCore.Builder;
+using Scalar.AspNetCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnection));
 
-builder.Services.AddSingleton<IProducer<string, string>>();
+// 1. Встроенная поддержка OpenAPI в .NET 9
+builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+// 2. Правильная регистрация Kafka Producer
+var producerConfig = new ProducerConfig
+{
+    BootstrapServers = "localhost:9092",
+    Acks = Acks.Leader
+};
+
+builder.Services.AddSingleton<IProducer<string, string>>(sp =>
+    new ProducerBuilder<string, string>(producerConfig).Build());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 3. Маппинг OpenAPI эндпоинта
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi(); // Генерирует JSON описание по адресу /openapi/v1.json
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
